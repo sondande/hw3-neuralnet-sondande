@@ -155,19 +155,17 @@ def data_preprocessing(dataset):
 """
 Creation of a Sigmoid Function that handles overflow cases as well
 """
-# def sigmoid(net):
-#     # If x is a very large positive number, the sigmoid function will be close to 1
-#     if net >= 0:
-#         temp = np.exp(-net)
-#         out = 1 / (1 + temp)
-#     # If x is a very large negative number, the sigmoid function will be close to 0
-#     else:
-#         temp = np.exp(net)
-#         out = temp / (1 + temp)
-#     return out
-
 def sigmoid(net):
-    return expit(net)
+    # If x is a very large positive number, the sigmoid function will be close to 1
+    if net >= 0:
+        temp = np.exp(-net)
+        out = 1 / (1 + temp)
+    # If x is a very large negative number, the sigmoid function will be close to 0
+    else:
+        temp = np.exp(net)
+        out = temp / (1 + temp)
+    return out
+
 
 """
 Calculate Net Value for Stochastic Gradient Descent
@@ -252,10 +250,22 @@ try:
     validation_set = data_preprocessing(validation_set).to_numpy()
     testing_set = data_preprocessing(testing_set).to_numpy()
 
-    # Initialize models in hidden layer
-    hidden_layer = [LogisticalRegressionModel(training_set, validation_set, learning_rate, threshold) for x in range(number_hidden_neurons)]
+    # Initialize models in hidden layer for the number of hidden layer neurons given as a parameter
+    # Notice that at initialization, the weights are different as then created, they are randomly generated in the constructor
+    hidden_layer = []
+    for x in range(number_hidden_neurons):
+        # Creates new logistical regression model
+        model = LogisticalRegressionModel(training_set, validation_set, learning_rate, threshold)
+        # Trains the model
+        model.fit()
+        # Calculate predictions from trained model
+        model.predict(testing_set)
+        # Add trained model to hidden layer list
+        hidden_layer.append(model)
 
-    
+
+
+
     print("hello")
     # Train the model
     # output_weights = model.fit()
