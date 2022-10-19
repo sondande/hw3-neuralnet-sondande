@@ -179,6 +179,12 @@ def net_calculate(weights, x_instance):
     return net
 
 """
+Implementation of Back Propagation Method
+"""
+def back_propogation():
+    return
+
+"""
 Takes the following parameters:
 
 a. The path to a file containing a data set (e.g., monks1.csv)
@@ -257,13 +263,13 @@ try:
         # Creates new logistical regression model
         model = LogisticalRegressionModel(training_set, validation_set, learning_rate, threshold)
         # Trains the model
-        model.fit()
+        model_weights = model.fit()
         # Calculate predictions from trained model
         model.predict(testing_set)
         # Add trained model to hidden layer list
-        hidden_layer.append(model)
+        hidden_layer.append(model_weights)
 
-
+    print(f"Hidden Layer: {hidden_layer}")
 
 
     print("hello")
