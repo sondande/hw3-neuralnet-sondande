@@ -181,7 +181,19 @@ def net_calculate(weights, x_instance):
 """
 Implementation of Back Propagation Method
 """
-def back_propogation():
+def back_propogation(hidden_layer):
+    # For each instance in the training set:
+        # 1. Feed instance forward through network
+            # A. Calculate out_o for each neuron k in the hidden layer
+        # 2. Calculate the error of the neural network’s prediction
+            # A. error = (y - out_o)
+        # 3. Calculate feedbacks for the neurons to understand their responsibility in error
+            # A. Calculate Feedback_o = out_o * (1 - out_o) * error for output neuron o
+            # B. Calculate Feedback_k = out_k * (1 - out_k) * w_k,o * feedback_o for each neuron k in the hidden layer
+        # 4. Update weights based on feedbacks and inputs for all neurons
+            # A. Gradient w_k,o = -out_k * feedback_o
+            # B. Gradient w_i_k = -x_i * feedback_k for each neuron k in the hidden layer
+    # Repeat until max iterations is reached or we reach a desired accuracy on the validation set
     return
 
 """
@@ -256,31 +268,28 @@ try:
     validation_set = data_preprocessing(validation_set).to_numpy()
     testing_set = data_preprocessing(testing_set).to_numpy()
 
-    # Initialize models in hidden layer for the number of hidden layer neurons given as a parameter
-    # Notice that at initialization, the weights are different as then created, they are randomly generated in the constructor
-    hidden_layer = []
-    for x in range(number_hidden_neurons):
-        # Creates new logistical regression model
-        model = LogisticalRegressionModel(training_set, validation_set, learning_rate, threshold)
-        # Trains the model
-        model_weights = model.fit()
-        # Calculate predictions from trained model
-        model.predict(testing_set)
-        # Add trained model to hidden layer list
-        hidden_layer.append(model_weights)
+    # # Initialize models in hidden layer for the number of hidden layer neurons given as a parameter
+    # # Notice that at initialization, the weights are different as then created, they are randomly generated in the constructor
+    # hidden_layer = []
+    # for x in range(number_hidden_neurons):
+    #     # Creates new logistical regression model
+    #     model = LogisticalRegressionModel(training_set, validation_set, learning_rate, threshold)
+    #     # Trains the model
+    #     model_weights = model.fit()
+    #     # Calculate predictions from trained model
+    #     model.predict(testing_set)
+    #     # Add trained model to hidden layer list
+    #     hidden_layer.append(model_weights)
+    #
+    # print(f"Hidden Layer: {hidden_layer}")
 
-    print(f"Hidden Layer: {hidden_layer}")
+    # Create all the random beginning weights for each neuron in the hidden layer
+    hidden_layer = [np.random.uniform(-0.1, 0.1, training_set.shape[1]) for i in range(number_hidden_neurons)]
 
+    # Compute back Propagation
+    back_propogation(hidden_layer)
 
     print("hello")
-    # Train the model
-    # output_weights = model.fit()
-
-    # Calculate prediction
-    # model.predict(testing_set)
-
-    # Print score
-    # print(f"Score: {model.score()}")
 
 except IndexError as e:
     print(f"Error. Message below:\n{e}\nPlease try again.")
