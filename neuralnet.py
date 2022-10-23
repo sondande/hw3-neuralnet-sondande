@@ -181,39 +181,76 @@ def net_calculate(weights, x_instance):
 """
 Implementation of Back Propagation Method
 """
-def back_propogation(training_set, neural_network):
-    # For each instance in the training set:
-    for train_i in range(training_set.shape[0]):
-    # 1. Feed instance forward through network
-        # A. Calculate out_k for each neuron k in the hidden layer
-        out_k = []
-        for i in range(len(neural_network[0])):
-            out_k.append(sigmoid(net_calculate(neural_network[0][i], training_set[train_i])))
-        # B. Calculate out_o for each neuron o, using each out_k as the inputs to neuron o
-        out_o = sigmoid(net_calculate(out_k, neural_network[1]))
-        print(f"Train_i: {train_i}, out_o: {out_o}")
-    # 2. Calculate the error of the neural network’s prediction
-        # A. error = (y - out_o)
-        error = (training_set[train_i][0] - out_o)
-    # 3. Calculate feedbacks for the neurons to understand their responsibility in error
-        # A. Calculate Feedback_o = out_o * (1 - out_o) * error for output neuron o
-        feed_o = out_o * (1 - out_o) * error
-        # B. Calculate Feedback_k = out_k * (1 - out_k) * w_k,o * feedback_o for each neuron k in the hidden layer
-        feed_k = []
-        for i in range(len(neural_network[0])):
-            feed_k.append(out_k[i] * (1 - out_k[i]) * neural_network[1][i] * feed_o)
-        print()
-    # 4. Update weights based on feedbacks and inputs for all neurons
-        for i in range(number_hidden_neurons):
-            # A. Gradient w_k,o = -out_k * feedback_o
-            neural_network[1][i] = -1 * out_k[i] * feed_o
+def back_propogation(training_set, validation_set, neural_network):
+    accuracy = 0
+    epochs = 0
+    while accuracy <= 0.99:
+        # Ensure we are runnning 500 epochs
+        if epochs > 500:
+            break
+        # For each instance in the training set:
+        for train_i in range(training_set.shape[0]):
+        # 1. Feed instance forward through network
+            # A. Calculate out_k for each neuron k in the hidden layer
+            out_k = []
+            # Iterate through all the hiddne layer neurons
+            for i in range(number_hidden_neurons):
+                out_k.append(sigmoid(net_calculate(neural_network[0][i], training_set[train_i])))
+            # B. Calculate out_o for each neuron o, using each out_k as the inputs to neuron o
+            out_o = sigmoid(net_calculate(neural_network[1], out_k))
+        # 2. Calculate the error of the neural network’s prediction
+            # A. error = (y - out_o)
+            error = (training_set[train_i][0] - out_o)
+        # 3. Calculate feedbacks for the neurons to understand their responsibility in error
+            # A. Calculate Feedback_o = out_o * (1 - out_o) * error for output neuron o
+            feed_o = out_o * (1 - out_o) * error
+            # B. Calculate Feedback_k = out_k * (1 - out_k) * w_k,o * feedback_o for each neuron k in the hidden layer
+            feed_k = []
+            # use counter to ensure we dont't use the w_0 weight that is in the output neuron
+            count = 1
+            for i in range(number_hidden_neurons):
+                feed_k.append(out_k[i] * (1 - out_k[i]) * neural_network[1][count] * feed_o)
+                neural_network[1][count] = -1 * out_k[i] * feed_o
+            # 4. Update weights based on feedbacks and inputs for all neurons
+                # A. Gradient w_k,o = -out_k * feedback_o
+                neural_network[1][count] = -1 * out_k[i] * feed_o
+                # B. Gradient w_i_k = -x_i * feedback_k for each neuron k in the hidden layer
+                for att in range(len(neural_network[0][0])):
+                    neural_network[0][i][att] = training_set[train_i][att] * feed_k[i]
+                count += 1
             print()
-        # B. Gradient w_i_k = -x_i * feedback_k for each neuron k in the hidden layer
-        for i in range(len(neural_network[0])):
-            for att in range(len(neural_network[0][0])):
-                print(f"Before: {neural_network[0][i][att]}")
-                neural_network[0][i][att] = training_set[train_i][att] * feed_k[i]
-                print(f"After: {neural_network[0][i][att]}")
+
+        # Checking against the validation set
+        # For each instance in the validation set:
+        tt = 0
+        tf = 0
+        ft = 0
+        ff = 0
+        for val_i in range(validation_set.shape[0]):
+            # 1. Feed instance forward through network
+            # A. Calculate out_k for each neuron k in the hidden layer
+            out_val_k = []
+            # Iterate through all the hidden layer neurons
+            for i in range(number_hidden_neurons):
+                out_val_k.append(sigmoid(net_calculate(neural_network[0][i], validation_set[val_i])))
+            # B. Calculate out_o for each neuron o, using each out_k as the inputs to neuron o
+            out_o = sigmoid(net_calculate(neural_network[1], out_val_k))
+            predict = 1 if out_o >= threshold else 0
+            instance_label = validation_set[val_i][0]
+            # print(f"Val: {val_i}, predicted value: {predicted_val}")
+            # print(f"Val: {val_i}, Actual value: {validation_set[val_i][0]}\n")
+            print()
+            if predict == 1 and instance_label == 1:
+                tt += 1
+            elif predict == 1 and instance_label == 0:
+                ft += 1
+            elif predict == 0 and instance_label == 1:
+                tf += 1
+            else:
+                ff += 1
+        accuracy = (tt + ff) / (tt + tf + ft + ff)
+        epochs += 1
+        print(f"Epoch: {epochs}, accuracy: {accuracy}\n")
     # Repeat until max iterations is reached or we reach a desired accuracy on the validation set
     return
 
@@ -308,14 +345,14 @@ try:
     hidden_layer = [np.random.uniform(-0.1, 0.1, training_set.shape[1]) for i in range(number_hidden_neurons)]
 
     # Create an output neuron that has <number_of_hidden_neurons> TODO double check if correct
-    output_neuron = np.random.uniform(-0.1, 0.1, number_hidden_neurons)
+    output_neuron = np.random.uniform(-0.1, 0.1, number_hidden_neurons + 1)
 
     # Create neural network list
     neural_network = [hidden_layer, output_neuron]
 
     print(training_set.shape)
     # Compute back Propagation
-    back_propogation(training_set, neural_network)
+    back_propogation(training_set, validation_set, neural_network)
 
     print("hello")
 
