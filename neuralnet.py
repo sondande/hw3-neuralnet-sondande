@@ -227,7 +227,6 @@ def back_propogation(training_set, validation_set, neural_network):
             # neural_network[1][count] = -1 * out_k[i] * feed_o
             count += 1
 
-    for train_i in range(training_set.shape[0]):
         for i in range(number_hidden_neurons):
             # B. Gradient w_i_k = -x_i * feedback_k for each neuron k in the hidden layer
             for att in range(len(neural_network[0][0])):
@@ -263,7 +262,7 @@ def fit(training_set, validation_set, neural_network):
             for i in range(number_hidden_neurons):
                 out_val_k.append(sigmoid(net_calculate(neural_network[0][i], validation_set[val_i])))
             # B. Calculate out_o for each neuron o, using each out_k as the inputs to neuron o
-            out_o = sigmoid(net_calculate(neural_network[1], out_val_k))
+            out_o = sigmoid(net_calculate(neural_network[1], [0] + out_val_k))
             predict = 1 if out_o >= threshold else 0
             instance_label = validation_set[val_i][0]
             # print(f"Val: {val_i}, predicted value: {predicted_val}")
