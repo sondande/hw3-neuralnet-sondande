@@ -207,7 +207,7 @@ def back_propogation(training_set, validation_set, neural_network):
         for i in range(number_hidden_neurons):
             out_k.append(sigmoid(net_calculate(neural_network[0][i], training_set[train_i])))
         # B. Calculate out_o for each neuron o, using each out_k as the inputs to neuron o
-        out_o = sigmoid(net_calculate(neural_network[1], out_k))
+        out_o = sigmoid(net_calculate(neural_network[1], [0] + out_k))
         # 2. Calculate the error of the neural network’s prediction
         # A. error = (y - out_o)
         error = (training_set[train_i][0] - out_o)
@@ -235,7 +235,7 @@ def back_propogation(training_set, validation_set, neural_network):
                 # upd = training_set[train_i][att] * feed_k[i] * learning_rate
                 # print("update: ", upd)
                 if i == 0:
-                    neural_network[0][i][att] = -1 * out_k[i] * feed_o * learning_rate
+                    neural_network[0][i][att] -= -1 * feed_k[i] * learning_rate
                 else:
                     neural_network[0][i][att] -= -(training_set[train_i][att]) * feed_k[i] * learning_rate
     return neural_network
