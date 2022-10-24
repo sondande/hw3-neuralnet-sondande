@@ -28,6 +28,7 @@ Parameters:
     - Takes in the assumption that the training and validation set are a numpy array
 """
 
+
 class LogisticalRegressionModel:
     def __init__(self, trainingSet, validationSet, learningRate, threshold_value):
         self.trainSet = trainingSet
@@ -62,7 +63,7 @@ class LogisticalRegressionModel:
                 for attr_count in range(1, len(self.trainSet[0])):
                     grad_wi = 0
                     grad_wi = -1 * self.trainSet[insta_count][attr_count] * out_value * (1 - out_value) * (
-                                instance_label - out_value)
+                            instance_label - out_value)
                     self.weights[attr_count] -= (self.learning_rate * grad_wi)
             epochs += 1
             tt = 0
@@ -87,7 +88,7 @@ class LogisticalRegressionModel:
                 else:
                     ff += 1
             accuracy = (tt + ff) / (tt + tf + ft + ff)
-        return self.weights # TODO check
+        return self.weights  # TODO check
 
     def predict(self, testing_dataset):
         # Initialize Variables
@@ -123,6 +124,7 @@ class LogisticalRegressionModel:
     def score(self):
         return self.test_acc
 
+
 def data_preprocessing(dataset):
     # Determine whether a column contains numerical or nominial values
     # Create a new Pandas dataframe to maintain order of columns when doing One-Hot Coding on Nominial values
@@ -134,27 +136,30 @@ def data_preprocessing(dataset):
             # Apply One-Hot Encoding onto Pandas Series at column 'x' 
             dummies = pd.get_dummies(dataset[x], prefix=x, prefix_sep='.', drop_first=True)
             # Combine the One-Hot Encoding Dataframe to our new dataframe to the new_dataframe 
-            new_dataframe = pd.concat([new_dataframe, dummies],axis=1)
-        else: 
+            new_dataframe = pd.concat([new_dataframe, dummies], axis=1)
+        else:
             # Find the maximum value in column 'x'
             max_value = max(dataset[x])
             # Find the minimum value in column 'x'
             min_value = min(dataset[x])
             # Check if the column being evaluated is the label column. If so, just add it right into the dataframe
-            if x =='label':
+            if x == 'label':
                 new_dataframe = pd.concat([new_dataframe, dataset[x]], axis=1)
                 continue
             # Ensure we don't run into a zero division error when normalizing all the values
             elif (max_value - min_value) != 0:
                 # Apply net value formula to every value in pandas dataframe
-                dataset[x] = dataset[x].apply(lambda y: (y - min_value)/(max_value - min_value))
+                dataset[x] = dataset[x].apply(lambda y: (y - min_value) / (max_value - min_value))
                 # Combine New column to our new_dataframe
-                new_dataframe = pd.concat([new_dataframe, dataset[x]],axis=1)
+                new_dataframe = pd.concat([new_dataframe, dataset[x]], axis=1)
     return new_dataframe
+
 
 """
 Creation of a Sigmoid Function that handles overflow cases as well
 """
+
+
 def sigmoid(net):
     # If x is a very large positive number, the sigmoid function will be close to 1
     if net >= 0:
@@ -170,6 +175,8 @@ def sigmoid(net):
 """
 Calculate Net Value for Stochastic Gradient Descent
 """
+
+
 def net_calculate(weights, x_instance):
     # take the first value from weights as it is part of the net without a corresponding value in the instance
     net = weights[0]
@@ -178,19 +185,22 @@ def net_calculate(weights, x_instance):
         net += weights[i] * x_instance[i]
     return net
 
+
 """
 Implementation of Back Propagation Method
 """
+
+
 def back_propogation(training_set, validation_set, neural_network):
     accuracy = 0
     epochs = 0
-    #while accuracy <= 0.99:
-        # Ensure we are runnning 500 epochs
-        #if epochs > 500:
-            #break
+    # while accuracy <= 0.99:
+    # Ensure we are runnning 500 epochs
+    # if epochs > 500:
+    # break
     # For each instance in the training set:
     for train_i in range(training_set.shape[0]):
-    # 1. Feed instance forward through network
+        # 1. Feed instance forward through network
         # A. Calculate out_k for each neuron k in the hidden layer
         out_k = []
         # Iterate through all the hiddne layer neurons
@@ -198,35 +208,38 @@ def back_propogation(training_set, validation_set, neural_network):
             out_k.append(sigmoid(net_calculate(neural_network[0][i], training_set[train_i])))
         # B. Calculate out_o for each neuron o, using each out_k as the inputs to neuron o
         out_o = sigmoid(net_calculate(neural_network[1], out_k))
-    # 2. Calculate the error of the neural network’s prediction
+        # 2. Calculate the error of the neural network’s prediction
         # A. error = (y - out_o)
         error = (training_set[train_i][0] - out_o)
-    # 3. Calculate feedbacks for the neurons to understand their responsibility in error
+        # 3. Calculate feedbacks for the neurons to understand their responsibility in error
         # A. Calculate Feedback_o = out_o * (1 - out_o) * error for output neuron o
         feed_o = out_o * (1 - out_o) * error
         # B. Calculate Feedback_k = out_k * (1 - out_k) * w_k,o * feedback_o for each neuron k in the hidden layer
         feed_k = []
         # use counter to ensure we dont't use the w_0 weight that is in the output neuron
         count = 1
+        neural_network[1][0] -= -1 * learning_rate * feed_o
         for i in range(number_hidden_neurons):
             feed_k.append(out_k[i] * (1 - out_k[i]) * neural_network[1][count] * feed_o)
-        # 4. Update weights based on feedbacks and inputs for all neurons
+            # 4. Update weights based on feedbacks and inputs for all neurons
             # A. Gradient w_k,o = -out_k * feedback_o
-            neural_network[1][count] = -(neural_network[1][count]) * out_k[i] * feed_o
-            #neural_network[1][count] = -1 * out_k[i] * feed_o
+            neural_network[1][count] -= -1 * learning_rate * feed_o * out_k[i]
+            # neural_network[1][count] = -1 * out_k[i] * feed_o
             count += 1
 
     for train_i in range(training_set.shape[0]):
         for i in range(number_hidden_neurons):
             # B. Gradient w_i_k = -x_i * feedback_k for each neuron k in the hidden layer
             for att in range(len(neural_network[0][0])):
-                #print("neuron: ", neural_network[0][i][att])
-                #upd = training_set[train_i][att] * feed_k[i] * learning_rate
-                #print("update: ", upd)
+                # print("neuron: ", neural_network[0][i][att])
+                # upd = training_set[train_i][att] * feed_k[i] * learning_rate
+                # print("update: ", upd)
                 if i == 0:
                     neural_network[0][i][att] = -1 * out_k[i] * feed_o * learning_rate
-                neural_network[0][i][att] = -(training_set[train_i][att]) * feed_k[i] * learning_rate
+                else:
+                    neural_network[0][i][att] -= -(training_set[train_i][att]) * feed_k[i] * learning_rate
     return neural_network
+
 
 def fit(training_set, validation_set, neural_network):
     accuracy = 0
@@ -234,6 +247,8 @@ def fit(training_set, validation_set, neural_network):
     while accuracy <= 0.99:
         if epochs == 500:
             break
+
+        back_propogation(training_set, validation_set, neural_network)
         # Checking against the validation set
         # For each instance in the validation set:
         tt = 0
@@ -253,7 +268,7 @@ def fit(training_set, validation_set, neural_network):
             instance_label = validation_set[val_i][0]
             # print(f"Val: {val_i}, predicted value: {predicted_val}")
             # print(f"Val: {val_i}, Actual value: {validation_set[val_i][0]}\n")
-            #print()
+            # print()
             if predict == 1 and instance_label == 1:
                 tt += 1
             elif predict == 1 and instance_label == 0:
@@ -267,6 +282,7 @@ def fit(training_set, validation_set, neural_network):
         print(f"Epoch: {epochs}, accuracy: {accuracy}\n")
     # Repeat until max iterations is reached or we reach a desired accuracy on the validation set
     return
+
 
 """
 Takes the following parameters:
@@ -304,29 +320,34 @@ try:
     validation_set_percent = (1 - training_set_percent) / 2
 
     # Store the size of the testing set
-    testing_set_percent =  (1 - training_set_percent) / 2
+    testing_set_percent = (1 - training_set_percent) / 2
 
     # e. A random seed as an integer
     randomSeed = int(sys.argv[5])
 
-    #f. The threshold to use for deciding if the predicted label is a 0 or 1
+    # f. The threshold to use for deciding if the predicted label is a 0 or 1
     threshold = float(sys.argv[6])
 
     # Print all input values given for user to see
     print(f"Inputs:\nFile: {file_path}\nLearning rate: {learning_rate}")
-    print(f"Training Set Percent: {training_set_percent}\nValidation Set and Testing Set Percentages: {validation_set_percent}\n")
+    print(
+        f"Training Set Percent: {training_set_percent}\nValidation Set and Testing Set Percentages: {validation_set_percent}\n")
     print(f"Random Seed: {randomSeed}\nThreshold: {threshold}")
 
     # Read in dataset
     df = pd.read_csv(file_path)
 
     # Shuffle the dataframe. Use random seed from input and fraction 1 as we want the whole dataframe
-    shuffled_df = df.sample(frac=1,random_state=randomSeed)
+    shuffled_df = df.sample(frac=1, random_state=randomSeed)
 
     print(f"Number of Instances in Dataframe: {len(df)}")
 
+    ##TODO: preprocess before splitting
+    data_preprocessing(dataset=shuffled_df)
+
     # Split Dataset into training, validation, and testing sets. This is through identifying idices of where the percentages are in the dataset
-    splits_indices = [int(training_set_percent * len(df)), int((training_set_percent + validation_set_percent) * len(df))]
+    splits_indices = [int(training_set_percent * len(df)),
+                      int((training_set_percent + validation_set_percent) * len(df))]
     print(f"Splits indexes they begin at: {splits_indices}\n")
     training_set, validation_set, testing_set = np.split(shuffled_df, splits_indices)
 
@@ -335,10 +356,14 @@ try:
     print(f"Length of validiation set: {len(validation_set)}")
     print(f"Length of testing: {len(testing_set)}\n")
 
+    training_set = training_set.to_numpy()
+    validation_set = validation_set.to_numpy()
+    testing_set = testing_set.to_numpy()
+
     # Preprocess the data
-    training_set = data_preprocessing(training_set).to_numpy()
-    validation_set = data_preprocessing(validation_set).to_numpy()
-    testing_set = data_preprocessing(testing_set).to_numpy()
+    #training_set = data_preprocessing(training_set).to_numpy()
+    #validation_set = data_preprocessing(validation_set).to_numpy()
+    #testing_set = data_preprocessing(testing_set).to_numpy()
 
     # # Initialize models in hidden layer for the number of hidden layer neurons given as a parameter
     # # Notice that at initialization, the weights are different as then created, they are randomly generated in the constructor
@@ -366,8 +391,8 @@ try:
 
     print(training_set.shape)
     # Compute back Propagation
-    nn = back_propogation(training_set, validation_set, neural_network)
-    fit(training_set, validation_set, nn)
+    # back_propogation(training_set, validation_set, neural_network)
+    fit(training_set, validation_set, neural_network)
 
     print("hello")
 
@@ -380,4 +405,3 @@ except ValueError as e:
 except FileNotFoundError as e:
     print(f"Error. Message below:\n{e}\nPlease try again.")
     exit(1)
-
