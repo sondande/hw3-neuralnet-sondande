@@ -191,13 +191,9 @@ Implementation of Back Propagation Method
 """
 
 
-def back_propogation(training_set, validation_set, neural_network):
+def back_propogation(training_set, neural_network):
     accuracy = 0
     epochs = 0
-    # while accuracy <= 0.99:
-    # Ensure we are runnning 500 epochs
-    # if epochs > 500:
-    # break
     # For each instance in the training set:
     for train_i in range(training_set.shape[0]):
         # 1. Feed instance forward through network
@@ -247,7 +243,7 @@ def fit(training_set, validation_set, neural_network):
         if epochs == 500:
             break
 
-        back_propogation(training_set, validation_set, neural_network)
+        back_propogation(training_set, neural_network)
         # Checking against the validation set
         # For each instance in the validation set:
         tt = 0
@@ -280,8 +276,37 @@ def fit(training_set, validation_set, neural_network):
         epochs += 1
         print(f"Epoch: {epochs}, accuracy: {accuracy}\n")
     # Repeat until max iterations is reached or we reach a desired accuracy on the validation set
-    return
+    return neural_network
 
+def predict(testing_set, neural_network):
+    # Checking against the validation set
+    # For each instance in the validation set:
+    tt = 0
+    tf = 0
+    ft = 0
+    ff = 0
+    for val_i in range(testing_set.shape[0]):
+        # 1. Feed instance forward through network
+        # A. Calculate out_k for each neuron k in the hidden layer
+        out_val_k = []
+        # Iterate through all the hidden layer neurons
+        for i in range(number_hidden_neurons):
+            out_val_k.append(sigmoid(net_calculate(neural_network[0][i], testing_set[val_i])))
+        # B. Calculate out_o for each neuron o, using each out_k as the inputs to neuron o
+        out_o = sigmoid(net_calculate(neural_network[1], [0] + out_val_k))
+        predict = 1 if out_o >= threshold else 0
+        instance_label = testing_set[val_i][0]
+        if predict == 1 and instance_label == 1:
+            tt += 1
+        elif predict == 1 and instance_label == 0:
+            ft += 1
+        elif predict == 0 and instance_label == 1:
+            tf += 1
+        else:
+            ff += 1
+    accuracy = (tt + ff) / (tt + tf + ft + ff)
+    print(f"Accuracy: {accuracy}\n")
+    return
 
 """
 Takes the following parameters:
@@ -355,29 +380,14 @@ try:
     print(f"Length of validiation set: {len(validation_set)}")
     print(f"Length of testing: {len(testing_set)}\n")
 
-    training_set = training_set.to_numpy()
-    validation_set = validation_set.to_numpy()
-    testing_set = testing_set.to_numpy()
+    # training_set = training_set.to_numpy()
+    # validation_set = validation_set.to_numpy()
+    # testing_set = testing_set.to_numpy()
 
     # Preprocess the data
-    #training_set = data_preprocessing(training_set).to_numpy()
-    #validation_set = data_preprocessing(validation_set).to_numpy()
-    #testing_set = data_preprocessing(testing_set).to_numpy()
-
-    # # Initialize models in hidden layer for the number of hidden layer neurons given as a parameter
-    # # Notice that at initialization, the weights are different as then created, they are randomly generated in the constructor
-    # hidden_layer = []
-    # for x in range(number_hidden_neurons):
-    #     # Creates new logistical regression model
-    #     model = LogisticalRegressionModel(training_set, validation_set, learning_rate, threshold)
-    #     # Trains the model
-    #     model_weights = model.fit()
-    #     # Calculate predictions from trained model
-    #     model.predict(testing_set)
-    #     # Add trained model to hidden layer list
-    #     hidden_layer.append(model_weights)
-    #
-    # print(f"Hidden Layer: {hidden_layer}")
+    training_set = data_preprocessing(training_set).to_numpy()
+    validation_set = data_preprocessing(validation_set).to_numpy()
+    testing_set = data_preprocessing(testing_set).to_numpy()
 
     # Create all the random beginning weights for each neuron in the hidden layer
     hidden_layer = [np.random.uniform(-0.1, 0.1, training_set.shape[1]) for i in range(number_hidden_neurons)]
@@ -391,8 +401,9 @@ try:
     print(training_set.shape)
     # Compute back Propagation
     # back_propogation(training_set, validation_set, neural_network)
-    fit(training_set, validation_set, neural_network)
+    neural_network = fit(training_set, validation_set, neural_network)
 
+    predict(testing_set, neural_network)
     print("hello")
 
 except IndexError as e:
