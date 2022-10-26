@@ -79,10 +79,13 @@ Calculate Net Value for Stochastic Gradient Descent
 
 def net_calculate(weights, x_instance):
     # take the first value from weights as it is part of the net without a corresponding value in the instance
-    net = weights[0]
+    net = 0
     # Instances and weights are the same length
-    for i in range(1, len(x_instance)):
-        net += weights[i] * x_instance[i]
+    for i in range(0, len(x_instance)):
+        if i == 0:
+            net = weights[0]
+        else:
+            net += weights[i] * x_instance[i]
     return net
 
 def to_confusion_matrix(values):
@@ -160,6 +163,8 @@ def back_propagation(training_set, neural_network):
             out_k.append(sigmoid(net_calculate(neural_network[0][i], training_set[train_i])))
 
         # B. Calculate out_o for each neuron o, using each out_k as the inputs to neuron o
+        # Preappend the value 0 to the beginning of the list. Ensure that the length of both lists are the same.
+        # The value is a dummy value to take the place of what the label would have been 
         out_o = sigmoid(net_calculate(neural_network[1], [0] + out_k))
 
         # 2. Calculate the error of the neural network’s prediction
