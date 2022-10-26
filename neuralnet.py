@@ -164,7 +164,7 @@ def back_propagation(training_set, neural_network):
 
         # B. Calculate out_o for each neuron o, using each out_k as the inputs to neuron o
         # Preappend the value 0 to the beginning of the list. Ensure that the length of both lists are the same.
-        # The value is a dummy value to take the place of what the label would have been 
+        # The value is a dummy value to take the place of what the label would have been
         out_o = sigmoid(net_calculate(neural_network[1], [0] + out_k))
 
         # 2. Calculate the error of the neural network’s prediction
@@ -206,7 +206,7 @@ def back_propagation(training_set, neural_network):
     return neural_network
 
 
-def fit(training_set, validation_set, neural_network):
+def fit(training_set, validation_set, neural_network, number_of_layers = 0):
     accuracy = 0
     epochs = 0
     while accuracy <= 0.99:
@@ -322,6 +322,12 @@ try:
 
     # f. The threshold to use for deciding if the predicted label is a 0 or 1
     threshold = float(sys.argv[6])
+
+    # e. Number of hidden layers wanted
+    if len(sys.argv) > 7:
+        hidden_layer_num = int(sys.argv[7])
+    else:
+        hidden_layer_num = 0
 
     # Print all input values given for user to see
     print(f"Inputs:\nFile: {file_path}\nLearning rate: {learning_rate}")
