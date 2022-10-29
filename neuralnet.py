@@ -88,64 +88,6 @@ def net_calculate(weights, x_instance):
             net += weights[i] * x_instance[i]
     return net
 
-def to_confusion_matrix(values):
-    outFileName = f"results_{file_path}_{number_hidden_neurons}n_{learning_rate}r_{threshold}t_{training_set_percent}p_{randomSeed}.csv"
-    # Writing Seciton
-    outputFile = open("NN-results/" + outFileName, 'w')
-
-    writer = csv.writer(outputFile)
-    # Write Labels Row
-    writer.writerow(possible_labels)
-
-    confusion_m_result = []
-    # Write Columns Row
-    for label in possible_labels:
-        confusion_row = []
-        labelCounter = Counter(label_results_dict[label])
-        for compareLabel in possible_labels:
-            confusion_row.append(labelCounter[compareLabel])
-        confusion_row.append(label)
-        confusion_m_result.append(confusion_row)
-        writer.writerow(confusion_row)
-    return confusion_m_result
-
-"""
-    Print out all the stats from the confusion matrix such as accuracy, recall for each label, and their confidence interval
-"""
-def calculateStats(matrix):
-    # calculate accuracy
-    sum_diagnol = 0
-    sum_of_cells = 0
-    for x in range(len(matrix)):
-        for y in range(len(matrix)):
-            value = matrix[x][y]
-            if x == y:
-                sum_diagnol += matrix[x][y]
-            sum_of_cells += matrix[x][y]
-
-    accuracy = sum_diagnol / sum_of_cells
-    print(f"Accuracy: {accuracy}")
-    # calculate recall
-    for recall_x in range(len(matrix)):
-        sum_of_row_y = 0
-        for recall_y in range(len(matrix)):
-            if recall_y == recall_x:
-                cellyy = matrix[recall_x][recall_y]
-            sum_of_row_y +=  matrix[recall_y][recall_x]
-        # Error catching for zero division errr
-        if sum_of_row_y != 0:
-            recall = cellyy / sum_of_row_y
-        else:
-            recall = 0
-        print(f"Recall for {matrix[recall_x][-1]}: {recall}")
-
-    print()
-    # Calculate the confidence interval
-    confidence_interval_positive = accuracy + (1.96 * math.sqrt((accuracy * (1-accuracy))/(len(testingSet))))
-    confidence_interval_negative = accuracy - (1.96 * math.sqrt((accuracy * (1-accuracy))/(len(testingSet))))
-    print(f"Confidence Interval: [{confidence_interval_negative}, {confidence_interval_positive}]")
-
-
 """
 Implementation of Back Propagation Method
 """
@@ -255,7 +197,11 @@ def predict(testing_set, neural_network):
     tf = 0
     ft = 0
     ff = 0
+    actualLabel = []
+    predictLabels = []
+    filename = ("results-" + str(file_path) + "-" + str(learning_rate) + "r" + "-" + str(randomSeed) + ".csv")
     for val_i in range(testing_set.shape[0]):
+
         # 1. Feed instance forward through network
         # A. Calculate out_k for each neuron k in the hidden layer
         out_val_k = []
@@ -265,7 +211,9 @@ def predict(testing_set, neural_network):
         # B. Calculate out_o for each neuron o, using each out_k as the inputs to neuron o
         out_o = sigmoid(net_calculate(neural_network[1], [0] + out_val_k))
         predict = 1 if out_o >= threshold else 0
+        predictLabels.append(predict)
         instance_label = testing_set[val_i][0]
+        actualLabel.append(instance_label)
         if predict == 1 and instance_label == 1:
             tt += 1
         elif predict == 1 and instance_label == 0:
@@ -276,8 +224,49 @@ def predict(testing_set, neural_network):
             ff += 1
     accuracy = (tt + ff) / (tt + tf + ft + ff)
     print(f"Accuracy: {accuracy}\n")
-    to_confusion_matrix([tt,tf,ft,ff])
-    return
+    #to_confusion_matrix([tt,tf,ft,ff])
+
+    labels = np.unique(actualLabel)
+    size = len(actualLabel)
+    matrix = dict()
+
+    # create matrix initialised with 0 (nested dictionary)
+    for class_name in labels:
+        matrix[class_name] = {label: 0 for label in labels}
+
+    # form the confusion matrix by incrementing proper places
+    for i in range(size):
+        actual_class = actualLabel[i]
+        # print("actual_class: ", actual_class)
+        pred_class = predictLabels[i]
+        # print("pred_class:", pred_class)
+        matrix[actual_class][pred_class] += 1
+        # print("matrix: ", matrix[actual_class][pred_class])
+
+    matrix = dict(zip(labels, list(matrix.values())))
+
+    print("Confusion Matrix of given model is :")
+    print("Predicted Label")
+    keys = list(matrix.keys())
+    print(",".join(str(e) for e in keys))
+    for key, value in matrix.items():
+        for pred, count in value.items():
+            # print("key, value", key, value)
+            print(count, end=",")  # counts in predictLabel & true matching or false counts
+        print("%s" % key)  # respective keys
+    # print("true, pred: ", true, predictLabel)      # test-related print statement
+
+    with open(filename, "w") as f:
+        f.write((",".join(str(e) for e in keys)))
+        f.write('\n')
+        for key, value in matrix.items():
+            for pred, count in value.items():
+                f.write(str(count))  # counts in predictLabel & true matching or false counts
+                f.write(",")
+            f.write("%s" % key)  # respective keys
+            f.write("\n")
+
+    return accuracy
 
 """
 Takes the following parameters:
