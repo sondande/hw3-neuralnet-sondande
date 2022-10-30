@@ -30,7 +30,7 @@ a. What is the test set accuracy you observed for each number of neurons? Plot a
   - 2: 
     - Accuracy: 0.9
   - 5:
-    - Accuracy: 0.925
+    - Accuracy: 0.875
   - 10:
     - Accuracy: 0.9
   - 20:
@@ -38,9 +38,14 @@ a. What is the test set accuracy you observed for each number of neurons? Plot a
   - 50:
     - Accuracy: 0.95
 
+Graph of results:
+![Results from Number of Neurons in hidden layer and accuracy rate](./Test-Set-Accuracy.png)
+
 b. How did the accuracy change as the number of hidden neurons change? Why do you think this result occurred?
 
-The accuracy stayed pretty consistently. As we can see from the 
+The accuracy stayed pretty consistently. As we can see from the results, the accuracy rate didn't change as much regardless of how many hidden neurons were used. From this, the results possibly occured as there wasn't any further information that could be learned from each neuron and was resulting more in a consistent result. This could also be a case
+of overfitting as there's no neew information being learned from the neurons. We could see that with the information given, it is sometimes better for us to use more hidden neurons but in terms of the accuracy, it stays in the confidence interval. The more neurons we use, the more informed out neural network becomes. At the same time, we need to take into account 
+the factors of overfitting and reducing the likihood of that happening to the model. From this, we can find that there is an optimal amount of hidden neurons that we can use that will produce a consistent higher accuracy without worry of the model overfitting. 
 
 3) For the mnist_5v8.csv data set, use the three learning rates 𝜂 = 0.001, 0.01, 0.1. Use the number of neurons that gave the highest accuracy in Q2 (in case of ties, use the smallest number of neurons that tied for the highest accuracy), a training percentage of 60%, a threshold of 0.5, and the same random seed used in Q2. Track the accuracy on both the training set the validation set after each epoch of Backpropagation (i.e., after you feed the entire training set in).
 a. Plot the accuracy of the network on the training set for each epoch on a single line chart (again using your favorite tool) for all three learning rates (each learning rate should be a separate line on the same chart, where the x-axis is the epoch and the y-axis is the training set accuracy) . Include your line chart as an image in your GitHub repository.
