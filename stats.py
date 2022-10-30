@@ -50,6 +50,7 @@ def calculateStats(matrix):
         print(f"Recall for {matrix[recall_x][-1]}: {recall}")
 
     print()
+
     # Calculate the confidence interval
     confidence_interval_positive = accuracy + (1.96 * math.sqrt((accuracy * (1-accuracy))/(len(testingSet))))
     confidence_interval_negative = accuracy - (1.96 * math.sqrt((accuracy * (1-accuracy))/(len(testingSet))))

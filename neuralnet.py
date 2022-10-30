@@ -3,13 +3,11 @@ Assignment #3: Neural Network
 
 By Sagana Ondande & Ada Ates
 """
-import csv
-import math
 # Import Libraries
+from math import sqrt
 import sys
 import numpy as np
 import pandas as pd
-from scipy.special import expit
 from pandas.api.types import is_string_dtype
 from pandas.api.types import is_numeric_dtype
 
@@ -255,7 +253,12 @@ def predict(testing_set, neural_network):
         print("%s" % key)  # respective keys
     # print("true, pred: ", true, predictLabel)      # test-related print statement
 
-    with open(filename, "w") as f:
+    # Calculate and print recall for x and y
+    recall_x = matrix[0][0] / (matrix[0][0] + matrix[0][1])
+    recall_y = matrix[1][1] / (matrix[1][0] + matrix[1][1])
+    print(f"Recall of 0: {recall_x}\nRecall of 1: {recall_y}")
+
+    with open("results/"+ filename, "w") as f:
         f.write((",".join(str(e) for e in keys)))
         f.write('\n')
         for key, value in matrix.items():
@@ -360,7 +363,12 @@ try:
     neural_network = fit(training_set, validation_set, neural_network)
 
     # Output the prediction
-    predict(testing_set, neural_network)
+    accuracy = predict(testing_set, neural_network)
+
+    # Calculate and print the confidence interval
+    confidence_interval_positive = accuracy + (1.96 * sqrt((accuracy * (1 - accuracy)) / (len(testing_set))))
+    confidence_interval_negative = accuracy - (1.96 * sqrt((accuracy * (1 - accuracy)) / (len(testing_set))))
+    print(f"Confidence Interval: [{confidence_interval_negative}, {confidence_interval_positive}]")
 
 except IndexError as e:
     print(f"Error. Message below:\n{e}\nPlease try again.")
