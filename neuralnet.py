@@ -171,9 +171,6 @@ def fit(training_set, validation_set, neural_network, number_of_layers = 0):
             out_o = sigmoid(net_calculate(neural_network[1], [0] + out_val_k))
             predict = 1 if out_o >= threshold else 0
             instance_label = validation_set[val_i][0]
-            # print(f"Val: {val_i}, predicted value: {predicted_val}")
-            # print(f"Val: {val_i}, Actual value: {validation_set[val_i][0]}\n")
-            # print()
             if predict == 1 and instance_label == 1:
                 tt += 1
             elif predict == 1 and instance_label == 0:
@@ -199,7 +196,6 @@ def predict(testing_set, neural_network):
     predictLabels = []
     filename = ("results-" + str(file_path) + "-" + str(learning_rate) + "r" + "-" + str(randomSeed) + ".csv")
     for val_i in range(testing_set.shape[0]):
-
         # 1. Feed instance forward through network
         # A. Calculate out_k for each neuron k in the hidden layer
         out_val_k = []
