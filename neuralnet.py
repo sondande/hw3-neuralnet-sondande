@@ -224,7 +224,6 @@ def predict(testing_set, neural_network):
             ff += 1
     accuracy = (tt + ff) / (tt + tf + ft + ff)
     print(f"Accuracy: {accuracy}\n")
-    #to_confusion_matrix([tt,tf,ft,ff])
 
     labels = np.unique(actualLabel)
     size = len(actualLabel)
@@ -332,7 +331,7 @@ try:
 
     print(f"Number of Instances in Dataframe: {len(df)}")
 
-    ##TODO: preprocess before splitting
+    # Apply data preprocessing before splitting the dataframe
     shuffled_df = data_preprocessing(dataset=shuffled_df).to_numpy()
 
     # Split Dataset into training, validation, and testing sets. This is through identifying idices of where the percentages are in the dataset
@@ -349,7 +348,7 @@ try:
     # Create all the random beginning weights for each neuron in the hidden layer
     hidden_layer = [np.random.uniform(-0.1, 0.1, training_set.shape[1]) for i in range(number_hidden_neurons)]
 
-    # Create an output neuron that has <number_of_hidden_neurons> TODO double check if correct
+    # Create an output neuron that has <number_of_hidden_neurons> + 1 to account for the bias weight
     output_neuron = np.random.uniform(-0.1, 0.1, number_hidden_neurons + 1)
 
     # Create neural network list
