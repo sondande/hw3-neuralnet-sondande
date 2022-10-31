@@ -1,1 +1,13 @@
 .idea
+q3training-mnist_5v8.csv-0.001r-12345.csv
+q3training-mnist_5v8.csv-0.01r-12345.csv
+q3training-mnist_5v8.csv-0.1r-12345.csv
+q3validation-mnist_5v8.csv-0.001r-12345.csv
+q3validation-mnist_5v8.csv-0.01r-12345.csv
+q3validation-mnist_5v8.csv-0.1r-12345.csv
+test.jpg
+results/results-monks1.csv-0.1r-12345.csv
+results/q3-monks1.csv-0.1r-12345.csv
+results-mnist_5v8.csv-0.001r-12345.csv
+results/results-monks1.csv-0.1r-12345.csv
+results/results-monks1.csv-0.1r-12345.csv

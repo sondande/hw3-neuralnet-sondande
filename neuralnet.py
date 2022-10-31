@@ -149,11 +149,13 @@ def back_propagation(training_set, neural_network):
 def fit(training_set, validation_set, neural_network, number_of_layers = 0):
     accuracy = 0
     epochs = 0
+    filename1 = ("q3training-" + str(file_path) + "-" + str(learning_rate) + "r" + "-" + str(randomSeed) + ".csv")
+    filename2 = ("q3validation-" + str(file_path) + "-" + str(learning_rate) + "r" + "-" + str(randomSeed) + ".csv")
     while accuracy <= 0.99:
         if epochs == 500:
             break
-
         back_propagation(training_set, neural_network)
+
         # Checking against the validation set
         # For each instance in the validation set:
         tt = 0
@@ -254,7 +256,7 @@ def predict(testing_set, neural_network):
     recall_y = matrix[1][1] / (matrix[1][0] + matrix[1][1])
     print(f"Recall of 0: {recall_x}\nRecall of 1: {recall_y}")
 
-    with open("results/"+ filename, "w") as f:
+    with open(filename, "w") as f:
         f.write((",".join(str(e) for e in keys)))
         f.write('\n')
         for key, value in matrix.items():
