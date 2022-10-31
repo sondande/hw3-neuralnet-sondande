@@ -61,23 +61,23 @@ Graph of results:
 
 b. How did the accuracy change as the number of hidden neurons change? Why do you think this result occurred?
 
-<<<<<<< Updated upstream
 The accuracy stayed pretty consistently. As we can see from the results, the accuracy rate didn't change as much regardless of how many hidden neurons were used. From this, the results possibly occured as there wasn't any further information that could be learned from each neuron and was resulting more in a consistent result. This could also be a case
-of overfitting as there's no neew information being learned from the neurons. We could see that with the information given, it is sometimes better for us to use more hidden neurons but in terms of the accuracy, it stays in the confidence interval. The more neurons we use, the more informed out neural network becomes. At the same time, we need to take into account 
-the factors of overfitting and reducing the likihood of that happening to the model. From this, we can find that there is an optimal amount of hidden neurons that we can use that will produce a consistent higher accuracy without worry of the model overfitting. 
+of overfitting as there's no new information being learned from the neurons. We could see that with the information given, it is sometimes better for us to use more hidden neurons but in terms of the accuracy, it stays in the confidence interval. The more neurons we use, the more informed out neural network becomes. At the same time, we need to take into account 
+the factors of overfitting and reducing the likelihood of that happening to the model. From this, we can find that there is an optimal amount of hidden neurons that we can use that will produce a consistent higher accuracy without worry of the model overfitting. 
 
-3) For the mnist_5v8.csv data set, use the three learning rates 𝜂 = 0.001, 0.01, 0.1. Use the number of neurons that gave the highest accuracy in Q2 (in case of ties, use the smallest number of neurons that tied for the highest accuracy), a training percentage of 60%, a threshold of 0.5, and the same random seed used in Q2. Track the accuracy on both the training set the validation set after each epoch of Backpropagation (i.e., after you feed the entire training set in).
-=======
 3. For the mnist_5v8.csv data set, use the three learning rates 𝜂 = 0.001, 0.01, 0.1. Use the number of neurons that gave the highest accuracy in Q2 (in case of ties, use the smallest number of neurons that tied for the highest accuracy), a training percentage of 60%, a threshold of 0.5, and the same random seed used in Q2. Track the accuracy on both the training set the validation set after each epoch of Backpropagation (i.e., after you feed the entire training set in).
 
->>>>>>> Stashed changes
 a. Plot the accuracy of the network on the training set for each epoch on a single line chart (again using your favorite tool) for all three learning rates (each learning rate should be a separate line on the same chart, where the x-axis is the epoch and the y-axis is the training set accuracy) . Include your line chart as an image in your GitHub repository.
  
-It can be found on GitHub.
+It can also be found on GitHub.
+
+![](q3training.jpg)
 
 b. Plot the accuracy of the network on the validation set for each epoch on a single line chart (again using your favorite tool) for all three learning rates (each learning rate should be a separate line on the same chart, where the x-axis is the epoch and the y-axis is the validation set accuracy) . Include your line chart as an image in your GitHub repository.
 
-It can be found on GitHub.
+It can also be found on GitHub.
+
+![](q3validation.jpg)
 
 c. Compare the training set accuracy across the three learning rates. What trends do you observe in your line charts? What do you think this implies about choosing a learning rate?
 
@@ -89,8 +89,14 @@ Overall, these trends show that low learning rates takes a long to give better a
 
 d. Compare the validation set accuracy across the three learning rates. What trends do you observe in your line charts? What do you think this implies about choosing a learning rate?
 
-<<<<<<< Updated upstream
-4) For the seismic.csv data set, use 10 hidden neurons, a learning rate 𝜂 = 0.01, a training percentage of 60%, and your favorite random seed. Using five different thresholds (0.05, 0.1, 0.5, 0.9, 0.95) for converting the predicted probabilities into predicted labels, calculate the accuracy and recalls of your trained neural network on the test set.
+The validation set accuracy seems to start from a lower value when the learning rate is lower. The red line with learning rate 0.001 started its accuracy count from 0.4 whereas lines representing learning rates of 0.1 and 0.01 started from around 0.6. This is a significant difference. It also took a while for the red line to get better at learning, as it can be seen from the graph, it took around 100 epochs for red line to achieve a significantly higher accuracy (0.94) and around 400 epochs in total to reach its best accuracy (0.95) and catch up to the other rates.
+
+On the other hand, the green line representing a learning rate of 0.01 seems to have started validating from a similar accuracy as rate of 0.1. It takes a bit more for it to learn, although not as much as the red line. Green line takes around 25 epochs to reach a high accuracy of 0.94 and in total around 50 epochs to reach its best accuracy (0.95). Unlike the red line, where it was a building-up style learning progress, green line nearly spikes up to its high accuracy. This implies that it learns fast although it still takes its time a bit.
+
+Something interesting is observed for the blue line, which represents a learning rate of 0.1. It spikes up after around 10 epochs to an accuracy of 0.98. However, after a few epochs, its accuracy decreases to 0.94 and stays that way for the rest of the epochs. Although this rate learned fast compared to learning rates of 0.01 and 0.001, it didn't have as good learning results as 0.01 or 0.001. It seems that how many epochs it takes and how fast it learns have an effect on its accuracy results. This could be thought as cramming for an exam and learning everything. Yet because you have memorized everything in such a small amount of time, you forget some of it after the exam. If you divided your studying over the course of a more sparse time, your retention levels would be better. It seems like a rate of 0.1 is resulting in the same problem, it is overfitting and fails to do as good in the other epochs. Hence, it is best to choose a learning rate where it is neither too high nor too low. Learning rate should allow for progress where the program makes mistakes but also has enough of a learning in each epoch that it learns and does so efficiently.
+
+4. For the seismic.csv data set, use 10 hidden neurons, a learning rate 𝜂 = 0.01, a training percentage of 60%, and your favorite random seed. Using five different thresholds (0.05, 0.1, 0.5, 0.9, 0.95) for converting the predicted probabilities into predicted labels, calculate the accuracy and recalls of your trained neural network on the test set.
+
 a. What were the test set accuracies you observed for each threshold value? How did they change as the threshold changed? 
 - Dataset: seismic.csv 
 - Number of Hidden Neurons: 10 
@@ -108,17 +114,7 @@ a. What were the test set accuracies you observed for each threshold value? How 
   - Accuracy: 0.85 
 - Threshold: 0.95
   - Accuracy: 0.725
-
-=======
-The validation set accuracy seems to start from a lower value when the learning rate is lower. The red line with learning rate 0.001 started its accuracy count from 0.4 whereas lines representing learning rates of 0.1 and 0.01 started from around 0.6. This is a significant difference. It also took a while for the red line to get better at learning, as it can be seen from the graph, it took around 100 epochs for red line to achieve a significantly higher accuracy (0.94) and around 400 epochs in total to reach its best accuracy (0.95) and catch up to the other rates.
-
-On the other hand, the green line representing a learning rate of 0.01 seems to have started validating from a similar accuracy as rate of 0.1. It takes a bit more for it to learn, although not as much as the red line. Green line takes around 25 epochs to reach a high accuracy of 0.94 and in total around 50 epochs to reach its best accuracy (0.95). Unlike the red line, where it was a building-up style learning progress, green line nearly spikes up to its high accuracy. This implies that it learns fast although it still takes its time a bit.
-
-Something interesting is observed for the blue line, which represents a learning rate of 0.1. It spikes up after around 10 epochs to an accuracy of 0.98. However, after a few epochs, its accuracy decreases to 0.94 and stays that way for the rest of the epochs. Although this rate learned fast compared to learning rates of 0.01 and 0.001, it didn't have as good learning results as 0.01 or 0.001. It seems that how many epochs it takes and how fast it learns have an effect on its accuracy results. This could be thought as cramming for an exam and learning everything. Yet because you have memorized everything in such a small amount of time, you forget some of it after the exam. If you divided your studying over the course of a more sparse time, your retention levels would be better. It seems like a rate of 0.1 is resulting in the same problem, it is overfitting and fails to do as good in the other epochs. Hence, it is best to choose a learning rate where it is neither too high nor too low. Learning rate should allow for progress where the program makes mistakes but also has enough of a learning in each epoch that it learns and does so efficiently.
-
-4.For the seismic.csv data set, use 10 hidden neurons, a learning rate 𝜂 = 0.01, a training percentage of 60%, and your favorite random seed. Using five different thresholds (0.05, 0.1, 0.5, 0.9, 0.95) for converting the predicted probabilities into predicted labels, calculate the accuracy and recalls of your trained neural network on the test set.
-a. What were the test set accuracies you observed for each threshold value? How did they change as the threshold changed?
->>>>>>> Stashed changes
+  
 b. What were the recalls on each label that you observed for each threshold value? How did they change as the threshold changed?
 - Threshold: 0.05
   - Recall of label _0_: 0.7647058823529411
@@ -141,6 +137,15 @@ I would choose threshold 0.5 as the threshold value for this dataset. This comes
 generalizes to all possible data. This would be beneficial for this dataset as we want to have the trained model be able to work with predicting seismic events without as much worry that the model was overfitted to the training data. 
 
 ## 3) A short paragraph describing your experience during the assignment (what did you enjoy, what was difficult, etc.)
+
+Ada Ates~
+
+I personally quite enjoyed this lab, research questions were super helpful in contextualizing my understanding. I had trouble wrapping my head around equations, specifically steps 3 and 4, as I had thought of them differently. Debugging definitely helped me a lot to see why we use these equations and how it relates to doing a weight change in the automatic car example that we used when we started this unit (give more weights to the neurons on the right etc.). 
+
+Sagana Ondande~
+
 ## 4) An estimation of how much time you spent on the assignment, and
+
+Around 20-25 hours? Not really sure, it has been a long time since we started on this lab, and keeping track of time is hard!
 ## 5) An affirmation that you adhered to the honor code
 We affirm that we have adhered to the Honor Code. Ada Ates
