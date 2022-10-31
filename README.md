@@ -54,10 +54,44 @@ c. Compare the training set accuracy across the three learning rates. What trend
 d. Compare the validation set accuracy across the three learning rates. What trends do you observe in your line charts? What do you think this implies about choosing a learning rate?
 
 4) For the seismic.csv data set, use 10 hidden neurons, a learning rate 𝜂 = 0.01, a training percentage of 60%, and your favorite random seed. Using five different thresholds (0.05, 0.1, 0.5, 0.9, 0.95) for converting the predicted probabilities into predicted labels, calculate the accuracy and recalls of your trained neural network on the test set.
-a. What were the test set accuracies you observed for each threshold value? How did they change as the threshold changed?
+a. What were the test set accuracies you observed for each threshold value? How did they change as the threshold changed? 
+- Dataset: seismic.csv 
+- Number of Hidden Neurons: 10 
+- Learning Rate: 0.05
+- Training Set Size: 60%
+- Random Seed: 12345
+
+- Threshold: 0.05
+  - Accuracy: 0.9
+- Threshold: 0.1
+  - Accuracy: 0.925 
+- Threshold: 0.5
+  - Accuracy: 0.925  
+- Threshold: 0.9
+  - Accuracy: 0.85 
+- Threshold: 0.95
+  - Accuracy: 0.725
+
 b. What were the recalls on each label that you observed for each threshold value? How did they change as the threshold changed?
+- Threshold: 0.05
+  - Recall of label _0_: 0.7647058823529411
+  - Recall of label _1_: 1.0
+- Threshold: 0.1
+  - Recall of label _0_: 0.7647058823529411
+  - Recall of label _1_: 1.0
+- Threshold: 0.5
+  - Recall of label _0_: 0.9411764705882353
+  - Recall of label _1_: 0.9130434782608695
+- Threshold: 0.9
+  - Recall of label _0_: 1.0
+  - Recall of label _1_: 0.7391304347826086
+- Threshold: 0.95
+  - Recall of label _0_: 1.0
+  - Recall of label _1_: 0.5217391304347826
 c. Remembering that a label of 1 is predicting a seismic event, and a label of 0 is predicting that there is no seismic event, which threshold do you think is ideal for this data set? Why do you think this threshold is the best?
 
+I would choose threshold 0.5 as the threshold value for this dataset. This comes in combination of being one of the highest accuracy rates, but also through the recall results. The importance of the recall is that it is one of the best to evaluate how well the learned model
+generalizes to all possible data. This would be beneficial for this dataaset as we want to have the trained model be able to work with predicting seismic events without as much worry that the model was overfitted to the training data. 
 ## 3) A short paragraph describing your experience during the assignment (what did you enjoy, what was difficult, etc.)
 ## 4) An estimation of how much time you spent on the assignment, and
 ## 5) An affirmation that you adhered to the honor code
