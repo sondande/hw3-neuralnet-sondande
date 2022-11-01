@@ -144,8 +144,12 @@ I personally quite enjoyed this lab, research questions were super helpful in co
 
 Sagana Ondande~
 
+I enjoyed working on this lab! I found the overall process very fufilling, informative, but also motivating. I liked doing the research questions as well as they brought a great amount of perspective regarding how the amount of hidden layer neurons play in solving a problem. I found that I had trouble wrapping my head around the visualization of a neural network and the application of it. This is what has been difficult for mw currently with trying to implement multiple layers. 
+I think this has help with my knowledge of the algorithms, how they can be used in a neural network to make further decisions, and also how delicate these networks are alongside why they take a long time to train. I want to implement multiple layers correctly and am curious of other debugging techniques to help with this process further.
 ## 4) An estimation of how much time you spent on the assignment, and
 
 Around 20-25 hours? Not really sure, it has been a long time since we started on this lab, and keeping track of time is hard!
 ## 5) An affirmation that you adhered to the honor code
-We affirm that we have adhered to the Honor Code. Ada Ates
+We affirm that we have adhered to the Honor Code. 
+Ada Ates
+Sagana Ondande
