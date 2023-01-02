@@ -56,7 +56,6 @@ a. What is the test set accuracy you observed for each number of neurons? Plot a
   - 50:
     - Accuracy: 0.95
 
-Graph of results:
 ![Results from Number of Neurons in hidden layer and accuracy rate](./Test-Set-Accuracy.png)
 
 b. How did the accuracy change as the number of hidden neurons change? Why do you think this result occurred?
