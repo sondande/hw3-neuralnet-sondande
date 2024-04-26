@@ -2,6 +2,7 @@
 Assignment #3: Neural Network
 
 By Sagana Ondande & Ada Ates
+Github: https://github.com/sondande
 """
 # Import Libraries
 from math import sqrt
